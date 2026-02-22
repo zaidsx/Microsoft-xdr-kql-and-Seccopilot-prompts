@@ -129,6 +129,8 @@ Device has checked in recently
 You are not looking at a stale / dead endpoint
 
 If Heartbeat is missing → the device might be offline or broken.
+
+[Troubleshoot missing events or alerts issues for Microsoft Defender for Endpoint on Linux](https://learn.microsoft.com/en-us/defender-endpoint/linux-support-events#:~:text=Troubleshoot%20missing%20events%20or%20alerts%20issues%20for%20Microsoft%20Defender%20for%20Endpoint%20on%20Linux)
 ___________________________________________________
 
 let TimeRange = 30d;

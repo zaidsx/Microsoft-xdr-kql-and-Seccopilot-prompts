@@ -1,17 +1,10 @@
-📘 Microsoft XDR KQL & Security Copilot Promptbooks
-A community-driven repository that brings together Microsoft Defender XDR KQL queries and Microsoft Security Copilot promptbooks to help security teams hunt threats faster, improve investigations, and operationalize Copilot-assisted workflows.
-This repo is designed for:
-
-🔍 Threat Hunters
-🛡️ SOC Analysts & Engineers
-🚨 Incident Responders
-🤖 Security Copilot Users
-🧭 Detection Engineers
-
+We created this repository to give back to the Microsoft Defender community and help anyone working in security get faster, clearer, and more effective insights using KQL and Security Copilot.
+As a Cloud Solution Architect working with customers every day, I built these queries and promptbooks to solve real problems — and now I’m sharing them with everyone so the whole community can benefit.
+If this helps you, your SOC, or your customers — then this repo has done its job. 💙
 
 🚀 What’s Inside
 🔹 KQL Queries
-A curated collection of Kusto Query Language (KQL) examples for:
+A simple and growing collection of KQL queries that I personally use across:
 
 Microsoft Defender XDR
 Defender for Endpoint
@@ -19,55 +12,30 @@ Defender for Identity
 Defender for Office 365
 Sentinel (Advanced Hunting & Analytics)
 
-Includes:
+These include:
 
 Hunting queries
 Detection patterns
-MITRE-mapped queries
-Investigation workflows
+MITRE‑mapped examples
+Investigation shortcuts I found useful in the field
 
 
 🔹 Security Copilot Promptbooks
-Reusable prompt structures that help you:
+Easy‑to‑reuse prompt structures to help you:
 
-Accelerate investigations
-Guide Copilot through threat analysis
-Build repeatable processes
-Improve SOC efficiency
-Create consistent triage workflows
+Speed up investigations
+Guide Copilot step‑by‑step
+Standardize SOC workflows
+Make threat analysis smoother and more consistent
 
-
-📁 Repository Structure
-/KQL
-  /Advanced-Hunting
-  /Identity
-  /Endpoint
-  /Email
-  /Cloud
-  /Detections
-
-/Security-Copilot
-  /Promptbooks
-  /Incident-Response
-  /Threat-Hunting
-  /Forensics
-
-/Docs
-  README.md
-
+We built these based on real customer scenarios — feel free to take them, modify them, and make them your own.
 
 🧠 Goals of This Project
 
-Make real-world KQL examples accessible to everyone
-Provide high-quality Security Copilot prompt templates
-Help security teams accelerate detection & response
-Encourage community sharing and collaboration
-
+Make practical, real‑world KQL examples accessible to everyone
+Share Security Copilot prompts that actually work in day‑to‑day investigations
+Help security teams detect and respond faster
+Encourage collaboration, learning, and community growth
 
 📄 License
-This project is licensed under the MIT License, allowing free use, modification, and sharing.
-
-⭐ Support & Feedback
-If you find this helpful, please star the repository ⭐
-Feel free to open issues for suggestions or improvements.
-
+MIT License — free to use, free to modify, free to share.

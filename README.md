@@ -1,10 +1,10 @@
 We created this repository to give back to the Microsoft Defender community and help anyone working in security get faster, clearer, and more effective insights using KQL and Security Copilot.
-As a Cloud Solution Architect working with customers every day, I built these queries and promptbooks to solve real problems — and now I’m sharing them with everyone so the whole community can benefit.
+As a Cloud Solution Architect working with customers every day, We built these queries and promptbooks to solve real problems — and now We are sharing them with everyone so the whole community can benefit.
 If this helps you, your SOC, or your customers — then this repo has done its job. 💙
 
 🚀 What’s Inside
 🔹 KQL Queries
-A simple and growing collection of KQL queries that I personally use across:
+A simple and growing collection of KQL queries that We personally use across:
 
 Microsoft Defender XDR
 Defender for Endpoint

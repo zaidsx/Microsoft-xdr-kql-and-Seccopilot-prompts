@@ -5,7 +5,7 @@ By grouping and counting these behaviors, the query helps security teams quickly
 🔥 Which threat actions are happening most frequently
 🧭 Which categories of behaviors are most active in the environment
 🕒 When a suspicious or malicious behavior was first and last seen
-🛰️ Where the signal came from (Defender for Endpoint, Identity, Cloud Apps, Email, Sentinel, etc.)
+🛰️ Where the signal came from (Cloud Apps, Sentinel,)
 🎯 Relevant attack techniques and descriptions to understand attacker intent
 
 This delivers an immediate snapshot of your current threat landscape and ongoing attacker activity.
@@ -26,9 +26,7 @@ This gives analysts immediate context without needing to dig through individual 
 3️⃣ Cross‑Source Correlation (XDR + Sentinel)
 Your query includes ServiceSource and DetectionSource, letting analysts understand whether signals are coming from:
 
-Microsoft Defender for Endpoint
-Microsoft Defender for Identity
-Microsoft Defender for Office 365
+
 Microsoft Defender for Cloud Apps
 Sentinel Analytics Rules
 Sentinel UEBA Behaviors

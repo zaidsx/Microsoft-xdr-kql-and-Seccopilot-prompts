@@ -5,7 +5,6 @@ By grouping and counting these behaviors, the query helps security teams quickly
 🔥 Which threat actions are happening most frequently
 🧭 Which categories of behaviors are most active in the environment
 🕒 When a suspicious or malicious behavior was first and last seen
-🛰️ Where the signal came from (Cloud Apps, Sentinel,)
 🎯 Relevant attack techniques and descriptions to understand attacker intent
 
 This delivers an immediate snapshot of your current threat landscape and ongoing attacker activity.

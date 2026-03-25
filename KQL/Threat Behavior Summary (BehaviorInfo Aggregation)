@@ -1,106 +1,81 @@
-<h1>🔍 Threat Landscape Overview – KQL Query</h1>
+# 🔍 Threat Landscape Overview – KQL Query
 
-<p>
-This <strong>KQL query</strong> provides a high-level <strong>threat landscape overview</strong> by aggregating behavioral security signals across
-<strong>Microsoft Defender XDR</strong> and <strong>Microsoft Sentinel</strong>.
-</p>
+This **KQL query** provides a high‑level **threat landscape overview** by aggregating behavioral security signals across **Microsoft Defender XDR** and **Microsoft Sentinel**.
 
-<p>
-It analyzes data from the <code>BehaviorInfo</code> table and summarizes threat-related metadata such as:
-</p>
+It analyzes data from the `BehaviorInfo` table and summarizes threat‑related metadata such as:
 
-<ul>
-  <li>Action types</li>
-  <li>Behavior categories</li>
-  <li>MITRE ATT&CK techniques</li>
-  <li>Detection and service sources</li>
-  <li>First and last observed timestamps</li>
-</ul>
+- Action types  
+- Behavior categories  
+- MITRE ATT&CK techniques  
+- Detection and service sources  
+- First and last observed timestamps  
 
-<p>
 By grouping and counting these behaviors, the query helps security teams quickly identify:
-</p>
 
-<ul>
-  <li>🔥 <strong>The most frequent threat actions</strong> in the environment</li>
-  <li>🧭 <strong>Most active behavior categories</strong></li>
-  <li>🕒 <strong>When suspicious or malicious activity was first and last seen</strong></li>
-  <li>🎯 <strong>Relevant attack techniques and descriptions</strong> to understand attacker intent</li>
-</ul>
+- 🔥 **Which threat actions occur most frequently**
+- 🧭 **Which behavior categories are most active**
+- 🕒 **When suspicious or malicious behavior was first and last seen**
+- 🎯 **Relevant attack techniques and descriptions to understand attacker intent**
 
-<p>
 This delivers an immediate snapshot of your current threat landscape and ongoing attacker activity.
-</p>
 
-<hr/>
+---
 
-<h2>🎯 How This Helps Your Security Team</h2>
+## 🎯 How This Helps Your Security Team
 
-<h3>1️⃣ Threat Landscape Awareness</h3>
-<p>
+### 1️⃣ Threat Landscape Awareness
 The query provides a clear view of which malicious or suspicious behaviors are most common in your environment.
-Instead of analyzing raw logs, analysts get an aggregated map of real activity across:
-</p>
 
-<ul>
-  <li>Devices</li>
-  <li>Identities</li>
-  <li>Email</li>
-  <li>Cloud workloads</li>
-</ul>
+Instead of reviewing raw logs, analysts get an aggregated view of real activity across:
+- Devices  
+- Identities  
+- Email  
+- Cloud workloads  
 
-<h3>2️⃣ Faster Investigation &amp; Triage</h3>
-<p>
+---
+
+### 2️⃣ Faster Investigation & Triage
 Because the query pulls example descriptions and attack techniques, analysts immediately understand:
-</p>
 
-<ul>
-  <li>What the behavior represents</li>
-  <li>Which MITRE ATT&CK techniques it aligns with</li>
-  <li>Whether it relates to credential abuse, lateral movement, persistence, or exfiltration</li>
-</ul>
+- What the behavior represents  
+- Which MITRE ATT&CK techniques it aligns with  
+- Whether it relates to credential abuse, lateral movement, persistence, or exfiltration  
 
-<p>
-This provides instant context without needing to drill into individual events.
-</p>
+This provides instant context without drilling into individual events.
 
-<h3>3️⃣ Cross‑Source Correlation (XDR + Sentinel)</h3>
-<p>
-Including <code>ServiceSource</code> and <code>DetectionSource</code> allows analysts to identify whether signals originate from:
-</p>
+---
 
-<ul>
-  <li>Microsoft Defender for Cloud Apps</li>
-  <li>Microsoft Sentinel Analytics Rules</li>
-  <li>Microsoft Sentinel UEBA behaviors</li>
-</ul>
+### 3️⃣ Cross‑Source Correlation (XDR + Sentinel)
+The query includes `ServiceSource` and `DetectionSource`, allowing analysts to identify whether signals originate from:
 
-<p>
-This enables easier detection of multi‑vector attacks and cross‑product correlation.
-</p>
+- Microsoft Defender for Cloud Apps  
+- Microsoft Sentinel Analytics Rules  
+- Microsoft Sentinel UEBA behaviors  
 
-<h3>4️⃣ Realistic Threat Scenarios</h3>
-<p>
-By showing first and last seen timestamps along with attack technique examples, the query supports scenario‑based analysis:
-</p>
+This makes it easier to detect multi‑vector attacks and correlate activity across security products.
 
-<ul>
-  <li>Is this a one‑time event or recurring behavior?</li>
-  <li>Is the attacker escalating activity?</li>
-  <li>Is this technique part of a broader kill chain?</li>
-  <li>Is the tactic common across affected devices or identities?</li>
-</ul>
+---
 
-<h3>5️⃣ Prioritization Through Sorting</h3>
-<p>
-Sorting by <strong>ThreatCount (descending)</strong> ensures the SOC focuses on the most impactful and frequent threats first.
-</p>
+### 4️⃣ Realistic Threat Scenarios
+By showing **first and last seen timestamps** along with **attack technique examples**, the query supports scenario‑based investigation:
 
-<hr/>
+- Is this a one‑time event or recurring behavior?  
+- Is the attacker escalating activity?  
+- Is this technique part of a broader kill chain?  
+- Is the tactic common across affected devices or identities?  
 
-<h2>🧠 KQL Query</h2>
+This helps teams understand attacker behavior and technique progression.
 
-<pre><code>
+---
+
+### 5️⃣ Prioritization Through Sorting
+Sorting by **ThreatCount (descending)** ensures the SOC focuses on the most frequent and impactful threats first.
+
+---
+
+## 🧠 KQL Query
+
+```kql
 BehaviorInfo
 | where isnotempty(ActionType) and isnotempty(Categories)
 | summarize
@@ -126,8 +101,3 @@ BehaviorInfo
     ExampleAttackTechniques,
     ExampleDescription
 | sort by ThreatCount desc
-</code></pre>
-
-<p>
-✅ <strong>Use this query as a quick, high‑impact view of attacker behavior across your XDR and SIEM estate.</strong>
-</p>

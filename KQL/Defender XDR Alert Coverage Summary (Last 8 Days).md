@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Defender XDR Alert Coverage Summary (Last 8 Days)</title>
+  
 </head>
 <body>
 
@@ -124,44 +124,61 @@ incident investigation without additional hunting queries.
 
 <h3>Foundation for Automation</h3>
 <p>
-The output can be reused for:
+The output can be reused for weekly SOC reporting, detection coverage reviews,
+and future automation or custom detection logic.
 </p>
 
-<ul>
-  <li>Weekly SOC posture reports</li>
-  <li>Detection coverage reviews</li>
-  <li>Input into custom detection rules or automation workflows</li>
-</ul>
-
 <hr />
 
-<h2>Typical Use Cases</h2>
-
-<ul>
-  <li>Weekly security posture and alert volume reporting</li>
-  <li>Defender XDR coverage validation</li>
-  <li>Alert noise and tuning analysis</li>
-  <li>Executive or management security summaries</li>
-</ul>
-
-<hr />
-
-<h2>Suggested Repository Structure</h2>
+<h2>KQL Query</h2>
 
 <pre>
-/
-├── README.html
-├── queries/
-│   └── defender_xdr_alert_coverage_last8days.kql
-└── docs/
-    └── screenshots/
+let TimeRange = 30d;
+// === Devices where Sensor Data Collection is NOT compliant ===
+let sensorBad =
+    DeviceTvmSecureConfigurationAssessment
+    | where Timestamp > ago(TimeRange)
+    | where ConfigurationId == "scid-2001"
+    | summarize arg_max(Timestamp, *) by DeviceId
+    | where IsCompliant == false
+    | project DeviceId, DeviceName, IsCompliant;
+let proc = DeviceProcessEvents | where Timestamp > ago(TimeRange) | summarize hasProcess = count() by DeviceId;
+let net  = DeviceNetworkEvents | where Timestamp > ago(TimeRange) | summarize hasNetwork = count() by DeviceId;
+let file = DeviceFileEvents    | where Timestamp > ago(TimeRange) | summarize hasFile = count() by DeviceId;
+let logon= DeviceLogonEvents   | where Timestamp > ago(TimeRange) | summarize hasLogon = count() by DeviceId;
+let reg  = DeviceRegistryEvents| where Timestamp > ago(TimeRange) | summarize hasRegistry = count() by DeviceId;
+let img  = DeviceImageLoadEvents| where Timestamp > ago(TimeRange) | summarize hasImageLoad = count() by DeviceId;
+let dns  = DeviceNetworkInfo   | where Timestamp > ago(TimeRange) | summarize hasDNS = count() by DeviceId;
+let hb   = DeviceInfo          | where Timestamp > ago(TimeRange) | summarize hasHeartbeat = count() by DeviceId;
+sensorBad
+| join kind=leftouter proc on DeviceId
+| join kind=leftouter net on DeviceId
+| join kind=leftouter file on DeviceId
+| join kind=leftouter logon on DeviceId
+| join kind=leftouter reg on DeviceId
+| join kind=leftouter img on DeviceId
+| join kind=leftouter dns on DeviceId
+| join kind=leftouter hb on DeviceId
+| extend
+    MissingProcess   = iff(coalesce(hasProcess, 0) == 0, "Missing", "OK"),
+    MissingNetwork   = iff(coalesce(hasNetwork, 0) == 0, "Missing", "OK"),
+    MissingFile      = iff(coalesce(hasFile, 0) == 0, "Missing", "OK"),
+    MissingLogon     = iff(coalesce(hasLogon, 0) == 0, "Missing", "OK"),
+    MissingRegistry  = iff(coalesce(hasRegistry, 0) == 0, "Missing", "OK"),
+    MissingImageLoad = iff(coalesce(hasImageLoad, 0) == 0, "Missing", "OK"),
+    MissingDNS       = iff(coalesce(hasDNS, 0) == 0, "Missing", "OK"),
+    MissingHeartbeat = iff(coalesce(hasHeartbeat, 0) == 0, "Missing", "OK")
+| project DeviceName, DeviceId, IsCompliant,
+          MissingProcess, MissingNetwork, MissingFile, MissingLogon,
+          MissingRegistry, MissingImageLoad, MissingDNS, MissingHeartbeat
+| sort by DeviceName asc
 </pre>
 
 <hr />
 
 <p>
-<strong>Author:</strong> Security Operations / Detection Engineering<br />
-<strong>Platform:</strong> Microsoft Defender XDR – Advanced Hunting
+<strong>Platform:</strong> Microsoft Defender XDR – Advanced Hunting<br />
+<strong>Audience:</strong> SOC Analysts, Detection Engineers, Security Leadership
 </p>
 
 </body>

@@ -133,45 +133,79 @@ and future automation or custom detection logic.
 <h2>KQL Query</h2>
 
 <pre>
-let TimeRange = 30d;
-// === Devices where Sensor Data Collection is NOT compliant ===
-let sensorBad =
-    DeviceTvmSecureConfigurationAssessment
-    | where Timestamp > ago(TimeRange)
-    | where ConfigurationId == "scid-2001"
-    | summarize arg_max(Timestamp, *) by DeviceId
-    | where IsCompliant == false
-    | project DeviceId, DeviceName, IsCompliant;
-let proc = DeviceProcessEvents | where Timestamp > ago(TimeRange) | summarize hasProcess = count() by DeviceId;
-let net  = DeviceNetworkEvents | where Timestamp > ago(TimeRange) | summarize hasNetwork = count() by DeviceId;
-let file = DeviceFileEvents    | where Timestamp > ago(TimeRange) | summarize hasFile = count() by DeviceId;
-let logon= DeviceLogonEvents   | where Timestamp > ago(TimeRange) | summarize hasLogon = count() by DeviceId;
-let reg  = DeviceRegistryEvents| where Timestamp > ago(TimeRange) | summarize hasRegistry = count() by DeviceId;
-let img  = DeviceImageLoadEvents| where Timestamp > ago(TimeRange) | summarize hasImageLoad = count() by DeviceId;
-let dns  = DeviceNetworkInfo   | where Timestamp > ago(TimeRange) | summarize hasDNS = count() by DeviceId;
-let hb   = DeviceInfo          | where Timestamp > ago(TimeRange) | summarize hasHeartbeat = count() by DeviceId;
-sensorBad
-| join kind=leftouter proc on DeviceId
-| join kind=leftouter net on DeviceId
-| join kind=leftouter file on DeviceId
-| join kind=leftouter logon on DeviceId
-| join kind=leftouter reg on DeviceId
-| join kind=leftouter img on DeviceId
-| join kind=leftouter dns on DeviceId
-| join kind=leftouter hb on DeviceId
-| extend
-    MissingProcess   = iff(coalesce(hasProcess, 0) == 0, "Missing", "OK"),
-    MissingNetwork   = iff(coalesce(hasNetwork, 0) == 0, "Missing", "OK"),
-    MissingFile      = iff(coalesce(hasFile, 0) == 0, "Missing", "OK"),
-    MissingLogon     = iff(coalesce(hasLogon, 0) == 0, "Missing", "OK"),
-    MissingRegistry  = iff(coalesce(hasRegistry, 0) == 0, "Missing", "OK"),
-    MissingImageLoad = iff(coalesce(hasImageLoad, 0) == 0, "Missing", "OK"),
-    MissingDNS       = iff(coalesce(hasDNS, 0) == 0, "Missing", "OK"),
-    MissingHeartbeat = iff(coalesce(hasHeartbeat, 0) == 0, "Missing", "OK")
-| project DeviceName, DeviceId, IsCompliant,
-          MissingProcess, MissingNetwork, MissingFile, MissingLogon,
-          MissingRegistry, MissingImageLoad, MissingDNS, MissingHeartbeat
-| sort by DeviceName asc
+let DetectionSolutions = dynamic([
+    "Microsoft Defender for Endpoint", 
+    "Microsoft Defender for Office 365", 
+    "Microsoft Defender for Cloud Apps", 
+    "Microsoft Defender for Identity",
+    "MDE", "MDO", "MDCA", "MDA", "MDI"
+]);
+let SeverityOrder = dynamic(["Critical", "High", "Medium", "Low", "Informational"]);
+let AlertInfoData = AlertInfo
+| where TimeGenerated >= ago(8d)
+| extend 
+    DetectionSolution = case(
+        ServiceSource =~ "Microsoft Defender for Endpoint" or ServiceSource =~ "MDE", "MDE",
+        ServiceSource =~ "Microsoft Defender for Office 365" or ServiceSource =~ "MDO", "MDO",
+        ServiceSource =~ "Microsoft Defender for Cloud Apps" or ServiceSource =~ "MDCA" or ServiceSource =~ "MDA", "MDCA",
+        ServiceSource =~ "Microsoft Defender for Identity" or ServiceSource =~ "MDI", "MDI",
+        "Other"
+    )
+| summarize DetectionSolutions = make_set(DetectionSolution), 
+            AlertIds = make_set(AlertId), 
+            Severity = any(Severity), 
+            Status = "N/A", // Status not present in AlertInfo sample
+            CreationDate = min(TimeGenerated), 
+            Description = any(Title)
+    by AlertId
+| extend 
+    Classification = iif(array_length(DetectionSolutions) > 1, "Multi-signal", tostring(DetectionSolutions[0]))
+| project 
+    Type = "Alert",
+    ID = AlertId,
+    DetectionSolutions = iff(Classification == "Multi-signal", strcat_array(DetectionSolutions, ", "), Classification),
+    Severity,
+    Status,
+    CreationDate,
+    Description;
+let AlertEvidenceData = AlertEvidence
+| where TimeGenerated >= ago(8d)
+| extend 
+    DetectionSolution = case(
+        ServiceSource =~ "Microsoft Defender for Endpoint" or ServiceSource =~ "MDE", "MDE",
+        ServiceSource =~ "Microsoft Defender for Office 365" or ServiceSource =~ "MDO", "MDO",
+        ServiceSource =~ "Microsoft Defender for Cloud Apps" or ServiceSource =~ "MDCA" or ServiceSource =~ "MDA", "MDCA",
+        ServiceSource =~ "Microsoft Defender for Identity" or ServiceSource =~ "MDI", "MDI",
+        "Other"
+    )
+| summarize DetectionSolutions = make_set(DetectionSolution), 
+            AlertIds = make_set(AlertId), 
+            Severity = any(Severity), 
+            Status = "N/A", // Status not present in AlertEvidence sample
+            CreationDate = min(TimeGenerated), 
+            Description = any(Title)
+    by AlertId
+| extend 
+    Classification = iif(array_length(DetectionSolutions) > 1, "Multi-signal", tostring(DetectionSolutions[0]))
+| project 
+    Type = "AlertEvidence",
+    ID = AlertId,
+    DetectionSolutions = iff(Classification == "Multi-signal", strcat_array(DetectionSolutions, ", "), Classification),
+    Severity,
+    Status,
+    CreationDate,
+    Description;
+// Union and group/count by detection solution
+union AlertInfoData, AlertEvidenceData
+| extend SeverityRank = indexof(SeverityOrder, Severity)
+| summarize 
+    Count = count(),
+    ExampleIDs = make_set(ID, 5),
+    ExampleDescriptions = make_set(Description, 3)
+    by DetectionSolutions, Severity, Status, Type, SeverityRank
+| sort by SeverityRank asc, DetectionSolutions asc
+| project DetectionSolutions, Type, Severity, Status, Count, ExampleIDs, ExampleDescriptions
+
 </pre>
 
 <hr />

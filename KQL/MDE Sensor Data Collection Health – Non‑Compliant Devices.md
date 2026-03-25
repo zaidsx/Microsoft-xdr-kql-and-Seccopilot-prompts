@@ -193,3 +193,6 @@ sensorBad
 
 <p>
 📘 <a href="https://learn.microsoft.com/en-us/defender-endpoint/linux-support-events" target="_blank">
+Troubleshoot missing events or alerts issues for Microsoft Defender for Endpoint on Linux
+</a>
+</p>

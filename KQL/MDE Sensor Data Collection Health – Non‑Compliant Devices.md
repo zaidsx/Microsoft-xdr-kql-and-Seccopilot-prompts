@@ -148,8 +148,7 @@ The KQL query shows the <strong>last known telemetry that DID arrive</strong> â€
 
 <pre><code>
 let TimeRange = 30d;
-
-// === Devices where Sensor Data Collection is NOT compliant ===
+// === 1) Devices where Sensor Data Collection is NOT OK===
 let sensorBad =
     DeviceTvmSecureConfigurationAssessment
     | where Timestamp > ago(TimeRange)
@@ -157,16 +156,38 @@ let sensorBad =
     | summarize arg_max(Timestamp, *) by DeviceId
     | where IsCompliant == false
     | project DeviceId, DeviceName, IsCompliant;
-
-let proc = DeviceProcessEvents | where Timestamp > ago(TimeRange) | summarize hasProcess = count() by DeviceId;
-let net  = DeviceNetworkEvents | where Timestamp > ago(TimeRange) | summarize hasNetwork = count() by DeviceId;
-let file = DeviceFileEvents    | where Timestamp > ago(TimeRange) | summarize hasFile = count() by DeviceId;
-let logon= DeviceLogonEvents   | where Timestamp > ago(TimeRange) | summarize hasLogon = count() by DeviceId;
-let reg  = DeviceRegistryEvents| where Timestamp > ago(TimeRange) | summarize hasRegistry = count() by DeviceId;
-let img  = DeviceImageLoadEvents| where Timestamp > ago(TimeRange) | summarize hasImageLoad = count() by DeviceId;
-let dns  = DeviceNetworkInfo   | where Timestamp > ago(TimeRange) | summarize hasDNS = count() by DeviceId;
-let hb   = DeviceInfo          | where Timestamp > ago(TimeRange) | summarize hasHeartbeat = count() by DeviceId;
-
+let proc =
+    DeviceProcessEvents
+    | where Timestamp > ago(TimeRange)
+    | summarize hasProcess = count() by DeviceId;
+let net =
+    DeviceNetworkEvents
+    | where Timestamp > ago(TimeRange)
+    | summarize hasNetwork = count() by DeviceId;
+let file =
+    DeviceFileEvents
+    | where Timestamp > ago(TimeRange)
+    | summarize hasFile = count() by DeviceId;
+let logon =
+    DeviceLogonEvents
+    | where Timestamp > ago(TimeRange)
+    | summarize hasLogon = count() by DeviceId;
+let reg =
+    DeviceRegistryEvents
+    | where Timestamp > ago(TimeRange)
+    | summarize hasRegistry = count() by DeviceId;
+let img =
+    DeviceImageLoadEvents
+    | where Timestamp > ago(TimeRange)
+    | summarize hasImageLoad = count() by DeviceId;
+let dns =
+    DeviceNetworkInfo
+    | where Timestamp > ago(TimeRange)
+    | summarize hasDNS = count() by DeviceId;
+let hb_devices =
+    DeviceInfo
+    | where Timestamp > ago(TimeRange)
+    | summarize hasHeartbeat = count() by DeviceId;
 sensorBad
 | join kind=leftouter proc on DeviceId
 | join kind=leftouter net on DeviceId
@@ -175,16 +196,16 @@ sensorBad
 | join kind=leftouter reg on DeviceId
 | join kind=leftouter img on DeviceId
 | join kind=leftouter dns on DeviceId
-| join kind=leftouter hb on DeviceId
+| join kind=leftouter hb_devices on DeviceId
 | extend
-    MissingProcess   = iff(coalesce(hasProcess, 0) == 0, "Missing", "OK"),
-    MissingNetwork   = iff(coalesce(hasNetwork, 0) == 0, "Missing", "OK"),
-    MissingFile      = iff(coalesce(hasFile, 0) == 0, "Missing", "OK"),
-    MissingLogon     = iff(coalesce(hasLogon, 0) == 0, "Missing", "OK"),
-    MissingRegistry  = iff(coalesce(hasRegistry, 0) == 0, "Missing", "OK"),
-    MissingImageLoad = iff(coalesce(hasImageLoad, 0) == 0, "Missing", "OK"),
-    MissingDNS       = iff(coalesce(hasDNS, 0) == 0, "Missing", "OK"),
-    MissingHeartbeat = iff(coalesce(hasHeartbeat, 0) == 0, "Missing", "OK")
+    MissingProcess     = iff(coalesce(tolong(hasProcess), 0) == 0, "Missing", "OK"),
+    MissingNetwork     = iff(coalesce(tolong(hasNetwork), 0) == 0, "Missing", "OK"),
+    MissingFile        = iff(coalesce(tolong(hasFile), 0) == 0, "Missing", "OK"),
+    MissingLogon       = iff(coalesce(tolong(hasLogon), 0) == 0, "Missing", "OK"),
+    MissingRegistry    = iff(coalesce(tolong(hasRegistry), 0) == 0, "Missing", "OK"),
+    MissingImageLoad   = iff(coalesce(tolong(hasImageLoad), 0) == 0, "Missing", "OK"),
+    MissingDNS         = iff(coalesce(tolong(hasDNS), 0) == 0, "Missing", "OK"),
+    MissingHeartbeat   = iff(coalesce(tolong(hasHeartbeat), 0) == 0, "Missing", "OK")
 | project DeviceName, DeviceId, IsCompliant,
           MissingProcess, MissingNetwork, MissingFile, MissingLogon,
           MissingRegistry, MissingImageLoad, MissingDNS, MissingHeartbeat

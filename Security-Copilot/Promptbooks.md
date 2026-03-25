@@ -1,17 +1,67 @@
+# 🛡️ Security Copilot Promptbook
+## Weekly Security Posture & Open Incidents Report (Microsoft Defender XDR)
 
-Name: Weekly Security Posture & Open Incidents Report (XDR)
-Audience: SOC / InfoSec Leadership + Analysts
-Primary sources/plugins:
+---
 
-Microsoft Defender XDR plugin (required) [Microsoft...soft Learn | Learn.Microsoft.com], [Describe M...soft Learn | Learn.Microsoft.com]
-Microsoft Sentinel plugin (optional if your incidents are unified with Sentinel) [Security C...soft Learn | Learn.Microsoft.com]
+## 📌 Purpose
 
-Inputs (Promptbook variables):
+This promptbook is designed for **Information Security and SOC teams** to generate a **weekly security posture report** using **Microsoft Security Copilot** with **Microsoft Defender XDR** (and Microsoft Sentinel if unified).
 
-<TIME_RANGE> (example: last 7 days or past week)
-<REPORT_DATE> (example: 2026-03-25)
-<TOP_N> (example: 10)
-<TENANT_OR_ENV> (example: Production)
+The output provides:
+- A weekly security posture overview
+- Open incident and alert counts
+- Incident and alert summaries grouped by **detection solution**
+- Severity‑based prioritization (Critical → Low)
+- Clear **guidance and next steps** based on findings
 
+---
 
-Promptbooks support required inputs by using angle brackets with no spaces. [learn.microsoft.com]
+## 🧩 Supported Detection Solutions
+
+- **MDE** – Microsoft Defender for Endpoint  
+- **MDO** – Microsoft Defender for Office 365  
+- **MDCA (MDA)** – Microsoft Defender for Cloud Apps  
+- **MDI** – Microsoft Defender for Identity  
+- **Multi‑signal** – Incidents involving multiple Defender workloads
+
+---
+
+## 🧑‍💻 Intended Audience
+
+- SOC Analysts  
+- Incident Responders  
+- Security Operations Managers  
+- Information Security Leadership
+
+---
+
+## 🔌 Required Plugins
+
+- ✅ Microsoft Defender XDR  
+- ➕ Microsoft Sentinel (optional, if incidents are unified)
+
+---
+
+## 🔧 Promptbook Inputs
+
+Use **angle brackets with no spaces** when creating the promptbook.
+
+- `<TIME_RANGE>` → e.g. `last 7 days`
+- `<REPORT_DATE>` → e.g. `2026-03-25`
+- `<TOP_N>` → e.g. `10`
+- `<TENANT_OR_ENV>` → e.g. `Production`
+
+---
+
+# ▶️ Promptbook Flow
+
+> **Important:**  
+> Add the following prompts **in order** when creating the Promptbook in Security Copilot.  
+> Each prompt builds on the previous one.
+
+---
+
+## Prompt 1 — Context & Rules
+
+**Prompt:**
+``

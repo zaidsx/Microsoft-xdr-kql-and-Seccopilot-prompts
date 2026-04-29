@@ -1,10 +1,7 @@
-We created this repository to give back to the Microsoft Defender community and help anyone working in security get faster, clearer, and more effective insights using KQL and Security Copilot.
-As a Cloud Solution Architect working with customers every day, We built these queries and promptbooks to solve real problems — and now We are sharing them with everyone so the whole community can benefit.
-If this helps you, your SOC, or your customers — then this repo has done its job. 💙
-
+This repository was created to give back to the Microsoft Defender community and support anyone working in security to gain faster, clearer, and more effective insights using KQL and Security Copilot. The queries and promptbooks included here were built to solve real‑world security challenges and are shared openly so the wider community can benefit. If this repository helps a SOC team, security practitioners, or customers improve their work, then it has achieved its purpose. 💙
 🚀 What’s Inside
 🔹 KQL Queries
-A simple and growing collection of KQL queries that We personally use across:
+A simple and growing collection of KQL queries used across:
 
 Microsoft Defender XDR
 Defender for Endpoint
@@ -17,23 +14,21 @@ These include:
 Hunting queries
 Detection patterns
 MITRE‑mapped examples
-Investigation shortcuts I found useful in the field
-
+Investigation shortcuts proven useful in real environments
 
 🔹 Security Copilot Promptbooks
-Easy‑to‑reuse prompt structures to help you:
+Easy‑to‑reuse prompt structures designed to help:
 
 Speed up investigations
-Guide Copilot step‑by‑step
+Guide Security Copilot step‑by‑step
 Standardize SOC workflows
 Make threat analysis smoother and more consistent
 
-We built these based on real customer scenarios — feel free to take them, modify them, and make them your own.
-
+These promptbooks are based on real customer scenarios and are intended to be reused, modified, and adapted as needed.
 🧠 Goals of This Project
 
 Make practical, real‑world KQL examples accessible to everyone
-Share Security Copilot prompts that actually work in day‑to‑day investigations
+Share Security Copilot prompts that work in day‑to‑day investigations
 Help security teams detect and respond faster
 Encourage collaboration, learning, and community growth
 

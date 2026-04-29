@@ -1,4 +1,4 @@
-# Microsoft Defender Community Repository
+# Microsoft Defender 
 
 This repository was created to give back to the Microsoft Defender community and support anyone working in security to gain faster, clearer, and more effective insights using **KQL** and **Security Copilot**.
 

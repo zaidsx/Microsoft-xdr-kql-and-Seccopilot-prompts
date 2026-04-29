@@ -26,7 +26,7 @@ These include:
 
 ---
 
-### 🔹 Security Copilot Promptbooks
+### 🔹 Security Copilot Promptbooks (Coming Soon)
 
 Easy‑to‑reuse prompt structures designed to help:
 

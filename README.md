@@ -3,18 +3,18 @@ This repository was created to give back to the Microsoft Defender community and
 🔹 KQL Queries
 A simple and growing collection of KQL queries used across:
 
-Microsoft Defender XDR
-Defender for Endpoint
-Defender for Identity
-Defender for Office 365
-Sentinel (Advanced Hunting & Analytics)
+ -Microsoft Defender XDR
+ -Defender for Endpoint
+ -Defender for Identity
+ -Defender for Office 365
+ -Sentinel (Advanced Hunting & Analytics)
 
 These include:
 
-Hunting queries
-Detection patterns
-MITRE‑mapped examples
-Investigation shortcuts proven useful in real environments
+ -Hunting queries
+ -Detection patterns
+ -MITRE‑mapped examples
+ -Investigation shortcuts proven useful in real environments
 
 🔹 Security Copilot Promptbooks
 Easy‑to‑reuse prompt structures designed to help:

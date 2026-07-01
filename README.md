@@ -12,11 +12,14 @@ Everything here was built to solve real-world security challenges and is shared 
 
 ```
 .
-├── KQL/
-│   ├── AI-KQL/                          # AI agent threat detections
-│   │   ├── owasp-Top10-LLM2025/         # OWASP LLM Top 10 (2025) mapped set + README
-│   │   └── *.md                         # Credential abuse, lateral movement, dormant agents, etc.
-│   └── *.md                             # Endpoint health, email/phishing, alert coverage queries
+├── KQL/                                          # Hunting queries — Defender XDR / Sentinel
+│   ├── AI-KQL/                                   # AI agent threat detections
+│   │   ├── owasp-Top10-LLM2025/                  # OWASP LLM Top 10 (2025) mapped set + README
+│   │   │   └── Update-OWASP2025-LLM/             # Refreshed AgentsInfo pack + offline HTML viewer
+│   │   └── *.md                                  # Credential abuse, lateral movement, dormant agents, etc.
+│   └── *.md                                      # Endpoint health, email/phishing, alert coverage queries
+├── Workbooks/                                    # Microsoft Sentinel workbooks — cost optimization + deploy template
+├── Copilot-for-Security-Plugins/                # Security Copilot plugins (roadmap)
 ├── Copilot-for-Security-Promptbook-Playbooks/   # Security Copilot promptbooks (roadmap)
 ├── LICENSE
 └── README.md
@@ -57,6 +60,13 @@ Hunting queries, detection patterns, and investigation techniques for **Microsof
 - **Email & phishing:** Phishing Email Delivery Summary · Malicious URL Clicks by User · Attachment-Based Threats
 - **Endpoint health:** Endpoint Sensor Health (5 checks) · MDE Sensor Data Collection Health · MDE Telemetry Latency · Defender AV Mode
 - **Triage & coverage:** Defender XDR Alert Coverage Summary · Threat Behavior Summary (BehaviorInfo)
+
+---
+
+## 📊 Sentinel Workbooks
+
+Interactive Microsoft Sentinel workbooks with one-click deployment → [`Workbooks/`](Workbooks/)
+- **Cost Optimization workbook** — surface ingestion volume and spend by table/data source, spot noisy or low-value logs, and guide retention/tiering decisions. Ships with an ARM `deploy-` template for one-click deployment.
 
 ---
 

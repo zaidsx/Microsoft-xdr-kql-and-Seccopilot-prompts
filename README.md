@@ -12,18 +12,24 @@ Everything here was built to solve real-world security challenges and is shared 
 
 ```
 .
-├── KQL/                                          # Hunting queries — Defender XDR / Sentinel
-│   ├── AI-KQL/                                   # AI agent threat detections
-│   │   ├── owasp-Top10-LLM2025/                  # OWASP LLM Top 10 (2025) mapped set + README
-│   │   │   └── Update-OWASP2025-LLM/             # Refreshed AgentsInfo pack + offline HTML viewer
-│   │   └── *.md                                  # Credential abuse, lateral movement, dormant agents, etc.
-│   └── *.md                                      # Endpoint health, email/phishing, alert coverage queries
-├── Workbooks/                                    # Microsoft Sentinel workbooks — cost optimization + deploy template
+├── KQL/                                         # Hunting queries — Defender XDR / Sentinel (9 queries)
+│   ├── AI-KQL/                                  # AI agent threat detections (8 queries + README)
+│   │   └── owasp-Top10-LLM2025/                 # OWASP LLM Top 10 (2025) — 12 detections + README
+│   │       ├── updated-tables.md                # AIAgentsInfo → AgentsInfo schema migration notes
+│   │       └── Update-OWASP2025-LLM/            # Refreshed AgentsInfo pack — 12 detections + use case index
+│   └── *.md                                     # Endpoint health, email/phishing, alert coverage
+├── Workbooks/                                   # Sentinel cost optimization workbook + ARM deploy template
+├── Security-Copilot-Agents/                     # Custom Security Copilot agents (YAML skillset manifests)
+│   ├── SOCAlertAnalystEfficiencyDashboard-v400.yaml
+│   └── README.md                                # 12-section SOC efficiency, cost & adoption dashboard
+├── Security-Copilot-Custom-Plugins/             # Security Copilot custom plugins (roadmap)
 ├── Copilot-for-Security-Plugins/                # Security Copilot plugins (roadmap)
 ├── Copilot-for-Security-Promptbook-Playbooks/   # Security Copilot promptbooks (roadmap)
 ├── LICENSE
 └── README.md
 ```
+
+**At a glance:** 29 KQL detections (12 also shipped as refreshed `AgentsInfo` variants) · 1 Sentinel workbook + ARM deploy template · 1 Security Copilot agent
 
 ---
 
@@ -67,6 +73,32 @@ Hunting queries, detection patterns, and investigation techniques for **Microsof
 
 Interactive Microsoft Sentinel workbooks with one-click deployment → [`Workbooks/`](Workbooks/)
 - **Cost Optimization workbook** — surface ingestion volume and spend by table/data source, spot noisy or low-value logs, and guide retention/tiering decisions. Ships with an ARM `deploy-` template for one-click deployment.
+
+---
+
+## 🛡️ Security Copilot Agents
+
+Custom Security Copilot agents — complete YAML skillset manifests you can upload and run → [`Security-Copilot-Agents/`](Security-Copilot-Agents/)
+
+### SOC Alert & Analyst Efficiency Dashboard v400
+
+Ask *"How is my SOC performing?"* and get a **12-section** operational report built entirely from your own Microsoft Sentinel data:
+
+| | Sections |
+|---|---|
+| **Performance** | Efficiency summary (MTTA / MTTR) · SLA breaches · Incident reopen rate |
+| **Alert quality** | Alert volume by source · Noisiest detections with false-positive % |
+| **People** | Analyst workload and unassigned backlog · Aging backlog by incident age |
+| **Signals** | Daily trend with Z-score spike/drop anomaly detection |
+| **Trust & cost** | Data connector & rule health · Estimated ingestion cost in USD · Security Copilot adoption |
+
+One AGENT orchestrator drives a union-shaped KQL **snapshot** skill plus three failure-tolerant satellite skills, then renders all 12 sections itself — a missing `SentinelHealth`, `Usage`, or `CopilotActivity` table degrades only its own section instead of collapsing the report.
+
+**Read-only and workspace-scoped** — no Azure Resource Manager access, no delegated Azure token, and no externally hosted OpenAPI spec. Cost is estimated from billable ingestion volume × a configurable price per GB rather than the billing API, a deliberate trade of invoice precision for a much smaller attack surface.
+
+> ⚠️ **Tune before you trust it.** The SLA targets (4h / 24h / 72h) and the price per GB ($4.30) are **dummy defaults, not standards** — every organization must set them to its own SLA policy and commercial rate, or the breach counts and cost figures will not reflect reality.
+
+→ Full architecture, install steps, SLA logic, and tuning notes in the [agent README](Security-Copilot-Agents/README.md).
 
 ---
 
